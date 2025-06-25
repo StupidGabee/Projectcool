@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sintetizador Geleia PRO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sintetizador Geleia PRO 🍇🎵</h1>
+        </header>
+
+        <main class="app-layout">
+            <section class="notes-input-section">
+                <h2>Painel de Notas (A0 - C8)</h2>
+                <div class="note-controls-minimal">
+                    <div class="volume-control">
+                        <label for="volume-slider">Volume (1-9):</label>
+                        <input type="range" id="volume-slider" min="1" max="9" value="6">
+                        <span id="volume-display">6</span>
+                    </div>
+                </div>
+                <div id="full-piano-keys-container">
+                    <!-- 88 Botões de notas serão gerados aqui pelo script.js -->
+                </div>
+            </section>
+
+            <section class="sequencer-section">
+                <h2>Sequenciador Mágico</h2>
+                <textarea id="music-sheet" rows="10" placeholder="Ex: C4-5 C4-5*3 G4-6.|E4-6_+(7) F4-7^-(2) ..."></textarea>
+                <div class="sequencer-actions">
+                    <button id="clear-sheet-btn" class="action-btn clear">🗑️ Limpar</button>
+                </div>
+                
+                <div class="playback-controls">
+                    <h3>Controles Rítmicos</h3>
+                    <div class="tempo-control">
+                        <label for="tempo-slider">Tempo:</label>
+                        <input type="range" id="tempo-slider" min="20" max="320" value="120">
+                        <span id="tempo-display">120</span> BPM
+                    </div>
+                    <button id="play-btn" class="action-btn play">▶️ Tocar</button>
+                    <button id="stop-btn" class="action-btn stop">⏹️ Parar</button>
+                    <button id="download-mp3-btn" class="action-btn download">💾 MP3</button>
+                    <p id="mp3-status"></p>
+                </div>
+            </section>
+
+            <section class="tutorial-section">
+                <h2>Ajuda / Legenda de Notas</h2>
+                <div class="tutorial-content">
+                    <p><strong>Formato Básico da Nota:</strong> <code>NotaOitava-Volume</code> (Ex: <code>C4-5</code>, <code>A#3-7</code>)</p>
+                    <ul>
+                        <li><strong>Nota:</strong> C, C#, D, D#, E, F, F#, G, G#, A, A#, B</li>
+                        <li><strong>Oitava:</strong> 0 a 8</li>
+                        <li><strong>Volume:</strong> 1 (baixo) a 9 (alto)</li>
+                    </ul>
+                    <p><strong>Notas Simultâneas (Acordes):</strong> Use <code>|</code> para separar notas que devem tocar ao mesmo tempo.</p>
+                    <p>Ex: <code>C4-5|E4-5|G4-5</code> (Acorde de Dó Maior)</p>
+                    
+                    <p><strong>Modificadores Simples (após o volume, podem ser combinados):</strong></p>
+                    <ul>
+                        <li><code>*</code> : **Tremolo Padrão** (repete a nota algumas vezes, padrão 3). Ex: <code>A4-6*</code></li>
+                        <li><code>.</code> : **Staccato** (nota curta e destacada). Ex: <code>G3-7.</code></li>
+                        <li><code>^</code> : **Acento** (nota tocada mais forte). Ex: <code>F#5-5^</code></li>
+                        <li><code>_</code> : **Legato/Sustain** (nota sustentada por mais tempo). Ex: <code>E2-4_</code></li>
+                    </ul>
+                    
+                    <p><strong>Modificadores Avançados (com parâmetros, após o volume):</strong></p>
+                    <ul>
+                        <li><code>*&lt;N&gt;</code> : **Multi-Tremolo/Rebatida**. Repete a nota N vezes (N > 0). Ex: <code>A4-6*3</code>, <code>C3-5*5</code>.</li>
+                        <li><code>+(&lt;V&gt;)</code> : **Crescendo**. Aumenta o volume. V (1-9) é o volume final. Se V omitido ou 0 (ex: <code>G2-5+</code> ou <code>G2-5+(0)</code>), usa aumento padrão. Ex: <code>F4-3+(7)</code> (de vol 3 para 7).</li>
+                        <li><code>-(&lt;V&gt;)</code> : **Decrescendo**. Diminui o volume. V (1-9) é o volume final. Se V omitido ou 0 (ex: <code>A3-6-</code> ou <code>A3-6-(0)</code>), usa queda padrão. Ex: <code>E5-8-(2)</code> (de vol 8 para 2).</li>
+                    </ul>
+                    <p><strong>Ordem e Combinações:</strong> Modificadores podem ser combinados. O parser tentará identificá-los.</p>
+                    <p>Ex: <code>C4-5*3.^</code>, <code>D5-7_+(8)</code>, <code>A2-7.-</code></p>
+                    <p><strong>Separação de Eventos:</strong> Use ESPAÇO para separar diferentes "tempos" ou eventos musicais.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 
+        IMPORTANTE: COLE O CONTEÚDO COMPLETO DO ARQUIVO lame.min.js AQUI ABAIXO.
+        Substitua este comentário e o console.warn pela íntegra do código do LameJS.
+        Você pode encontrá-lo em: https://raw.githubusercontent.com/zhuker/lamejs/master/lame.min.js
+    -->
+    <script id="lamejs-script">
+        console.warn("Lembre-se de colar o conteúdo COMPLETO de lame.min.js aqui DENTRO desta tag <script>!");
+        // SE VOCÊ JÁ COLOU ANTES, VERIFIQUE SE NÃO HOUVE ERRO NA CÓPIA.
+        // Exemplo de como DEVE FICAR (apenas o início e fim):
+        // var lamejs=function(e){var t={};function r(n){if(t[n])return t[n].exports;var i=t[n]={i:n,l:!1,exports:{}}; ... MUITO CÓDIGO AQUI ... return e.exports}({0:function(e,t){e.exports=this}}});
+        // SE VOCÊ COLOU O CONTEÚDO DE "lamejs(){function X(c){return new Int32Array(c)}function K(c){return new Float32Array(c)}...", ISSO ESTÁ ERRADO.
+        // O LAMEJS que você colou anteriormente parece ser uma versão não minificada e potencialmente incompleta ou mal formatada para uso direto em uma tag script.
+        // O link que forneci (https://raw.githubusercontent.com/zhuker/lamejs/master/lame.min.js) contém a versão minificada correta que deve ser colada.
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
